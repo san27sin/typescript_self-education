@@ -92,6 +92,44 @@ structureType2({
 // =================
 // ЗАДАНИЕ! При пересечении с каким типом всегда будет получаться изначальный тип?
 
-type TestIntersection<T> = T & 'write-type-here'
+type TestIntersection<T> = T & unknown
 type ResTestIntersection = TestIntersection<string>
 
+const f007: TestIntersection<string> = ''
+
+
+
+// =================
+// ЗАДАНИЕ! При пересечении с каким типом будет всегда never?
+
+type TestIntersection2<T> = T & never
+type ResTestIntersection2 = TestIntersection2<number>
+
+const g007: ResTestIntersection2 = 123
+
+
+
+// =================
+// ЗАДАНИЕ! При объединении с каким типом всегда будет получаться тот же самый тип?
+
+type TestUnion<T> = T | never
+type ResTestUnion = TestUnion<boolean>
+
+const h007: ResTestUnion = true
+
+
+
+// =================
+// ЗАДАНИЕ! При объединение с каким типом всегда будет получаться unknown
+type TestUnion2<T> = T | unknown
+type ResTestUnion2 = TestUnion2<string> // res should be unknown
+
+const i007: ResTestUnion2 = {}
+
+
+
+// =================
+// ЗАДАНИЕ! Как с помощью пересечения можно отфильтровать все числа
+
+type FilterIntersection<T> = T & 'write-type-hear'
+type ResFilterIntersection = FilterIntersection<1 | 2 | 'value' | 'b'>
