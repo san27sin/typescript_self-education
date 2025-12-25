@@ -131,5 +131,46 @@ const i007: ResTestUnion2 = {}
 // =================
 // ЗАДАНИЕ! Как с помощью пересечения можно отфильтровать все числа
 
-type FilterIntersection<T> = T & 'write-type-hear'
-type ResFilterIntersection = FilterIntersection<1 | 2 | 'value' | 'b'>
+type FilterIntersection<T> = T & string
+type ResFilterIntersection = FilterIntersection<1 | 2 | 'value' | 'b' | never> // res should be 'value' | 'b'
+
+const l007: ResFilterIntersection = 'value'
+
+
+
+// =================
+// ЗАДАНИЕ! Как с помощью пересечения можно достать событие по типу из юниона
+
+type FindEventByIntersection<T, K> = T & K
+
+type Event1 = { type: 'user-created'; data: { name: string } }
+type Event2 = { type: 'user-deleted'; data: { id: number } }
+
+type ResFindEventByIntersection = FindEventByIntersection<Event1 | Event2, Event2> // Res should assignable Event2
+
+const p007: ResFindEventByIntersection = { type: 'user-deleted', data: { id: 234 } }
+
+
+
+// =================
+// ЗАДАНИЕ! Напишите такой тип что бы функцию можно было вызвать 3 разными способами
+
+type fn007 = [{ isOne: boolean } | { isTwo: boolean } | { isThree: boolean }, ...number[]]
+
+function structureUnion(...params: fn007) {}
+
+structureUnion({ isOne: true }, 1)
+// @ts-expect-error Здесь ошибка, так как при isOne только один дополнительный аргумент
+structureUnion({ isOne: true }, 1, 2)
+structureUnion({ isTwo: true }, 1, 2)
+structureUnion({ isThree: true }, 1, 2, 3)
+
+
+
+// =================
+// ЗАДАНИЕ! Без использования any напишите тип функции, к которому можно присвоить любой callback
+
+function anyCallback(cb: 'write-type-hear')
+
+anyCallback((a: number) => 1)
+anyCallback((a: string, b: number) => 'str')
