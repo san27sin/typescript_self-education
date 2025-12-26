@@ -170,7 +170,26 @@ structureUnion({ isThree: true }, 1, 2, 3)
 // =================
 // ЗАДАНИЕ! Без использования any напишите тип функции, к которому можно присвоить любой callback
 
-function anyCallback(cb: 'write-type-hear')
+type FnType007 = (...args: unknown[]) => unknown // не получилось решить
+
+function anyCallback(cb: T) {}
 
 anyCallback((a: number) => 1)
 anyCallback((a: string, b: number) => 'str')
+
+
+
+// =================
+// ЗАДАНИЕ! Какой тип нужно передать в параметр типа Ref что бы в этот тип был assignable любой другой реф?
+
+type Ref<T> = { current: T } | ((value: T) => void)
+
+type SuperRef = Ref<'write-type-hear'>
+
+function storeRef(anyRef: SuperRef) {}
+
+const numberRef = {} as Ref<number>
+const stringRef = {} as Ref<string>
+
+storeRef(numberRef)
+storeRef(stringRef)
