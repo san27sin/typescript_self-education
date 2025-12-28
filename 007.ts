@@ -184,7 +184,7 @@ anyCallback((a: string, b: number) => 'str')
 
 type Ref<T> = { current: T } | ((value: T) => void)
 
-type SuperRef = Ref<'write-type-hear'>
+type SuperRef = Ref<any>
 
 function storeRef(anyRef: SuperRef) {}
 
