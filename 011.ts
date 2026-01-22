@@ -28,3 +28,26 @@ type Tuple2 = [boolean, number]
 
 // Тут нет ограничения на один ...
 type NestedTuple = [...Tuple1, ...Tuple2]
+
+// Самое интересное - использовать ... с дженериками
+
+// Но есть проблема ... можно использовать только с типами assignable Array
+// @ts-expect-error
+type Push<T, V> = [...T,V]
+
+// Решение ограничение типами
+type AnyArray = readonly unknown[]
+type Push1<T extends AnyArray, V> = [...T, V]
+type R = Push1<[number, string], boolean>
+
+// В дженериках нет ограничения на два ...
+type Concat<T extends AnyArray, B extends AnyArray> = [...T, ...B]
+
+type R2 = Concat<number[], string[]> // (number | string)[]
+type R3 = Concat<[number], [string]> // [number, string]
+
+// Домашнее задание
+
+type Unshift<T> = T
+
+type R4 = Unshift<[number, string], boolean> // [boolean, number, string]
