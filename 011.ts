@@ -48,6 +48,8 @@ type R3 = Concat<[number], [string]> // [number, string]
 
 // Домашнее задание
 
-type Unshift<T> = T
+type Unshift<T extends AnyArray, K> = [K, ...T]
 
 type R4 = Unshift<[number, string], boolean> // [boolean, number, string]
+
+const test: R4 = [true, 123, 'hi']
