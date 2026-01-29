@@ -92,7 +92,7 @@ type R6 = WrapNotIdString<'str'>
 // Домашнее задание
 // Используйте условный оператор для преодоления ограничений на index access
 type ExtractValueFromKey2<T> = T extends { key: string }
-  ? (T['key'] extends keyof T ? T[T['key'] & keyof T] : unknown)
+  ? (T['key'] extends keyof T ? T[T['key']] : unknown)
   : unknown
 
 type R11 = ExtractValueFromKey2<{ key: 'value', value: number }>; // number
