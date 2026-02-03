@@ -35,5 +35,9 @@ type MyParameters<T> = T extends () => infer R ? R : never
 type GreetReturnType = MyParameters<() => string> // string
 
 // #2 должно возвращать массив кроме первого
-type Shift<T> = T extends [unknown, infer (...K[])] ? L : never
-type Result = Shift<[9, 7, 3, 2, 1]> // [2, 1]  
+type Shift<T> = T extends [unknown, ...infer L] ? L : never
+type Result = Shift<[5, 9, 7, 3, 2, 1]> // [2, 1]
+
+// #3 должно возвращать массив кроме последнего
+type Pop<T> = T extends [...infer L, unknown] ? L : never
+type Result2 = Pop<[3, 2, 1]> // [3, 2]
