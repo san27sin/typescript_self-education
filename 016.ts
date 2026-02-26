@@ -114,6 +114,17 @@ type RequiredUser = {
 // Домашняя работа
 
 // задание 1
-type NotNull<T> = T
+type NotNull<T> = {
+  [K in keyof T]: Exclude<T[K], null>
+}
 
 type Res = NotNull<{ value: string | null, arg: string }> // { value: string, arg: string }
+
+const value: Res = { value: 'q', arg: '123' }
+
+// Задание 2
+type RemoveByValue<T, U> = {
+  [K in keyof T as Extract<T[K], U> extends never ? never : K]: T[K]
+}
+
+type Res2 = RemoveByValue<{ value: string | null, arg: number }, string> // { value: string | null }
