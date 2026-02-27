@@ -113,7 +113,7 @@ type RequiredUser = {
 
 // Домашняя работа
 
-// задание 1
+// Задание 1
 type NotNull<T> = {
   [K in keyof T]: Exclude<T[K], null>
 }
@@ -128,3 +128,12 @@ type RemoveByValue<T, U> = {
 }
 
 type Res2 = RemoveByValue<{ value: string | null, arg: number }, string> // { value: string | null }
+
+// Задание 3
+
+type SafeMerge<T, U> =  Omit<T, keyof U> & U
+
+// Если есть общие поля берется последний
+type Res2 = SafeMerge<{ value: string, common: string }, { value2: number, common: number }> // { value: string, value2: number, common: number }
+
+const test4: Res2 =  { value: 'string', value2: 123, common: 123 }
