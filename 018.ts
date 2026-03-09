@@ -54,9 +54,14 @@ type Res3 = CreateTuple<999>
 
 // задание 1
 
-type DeepRequired<T> = {
-  [K in keyof T]-?: DeepRequired<T>
-}
+type DeepRequired<T> =
+  T extends Function
+    ? T
+    : T extends Array<infer U>
+      ? Array<DeepRequired<U>>
+      : T extends object
+        ? { [K in keyof T]-?: DeepRequired<T[K]> }
+        : T;
 
 type Res123 = DeepRequired<{
   value?: {
@@ -69,3 +74,12 @@ const res1: Res123 = {
     title: 'Title'
   }
 }
+
+// задание 2
+
+type Flatten<T> = T extends Array<infer Item>
+  ? Flatten<Item>
+  : T;
+
+
+type Res33 = Flatten<[1,2, [1,2, [3]]]> // [1, 2, 1, 2, 3]
