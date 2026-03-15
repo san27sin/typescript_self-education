@@ -81,5 +81,25 @@ type Flatten<T> = T extends Array<infer Item>
   ? Flatten<Item>
   : T;
 
-
 type Res33 = Flatten<[1,2, [1,2, [3]]]> // [1, 2, 1, 2, 3]
+
+// задание 3
+
+// перепешите Reverse на хвостовую рекурсию
+type Reverse2<T extends any[], Acc extends any[] = []> =
+  T extends [infer First, ...infer Rest]
+    ? Reverse2<Rest, [First, ...Acc]>
+    : Acc
+
+type Ten2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+// глубина рекурсии больше 50
+type Res22 = Reverse2<[ ...Ten2, ...Ten2, ...Ten2, ...Ten2, ...Ten2, 1]>
+
+// задание 4
+
+type SafeMergeTuple<T extends any[]> = T
+
+type Res44 = SafeMergeTuple<[
+  { value: string }, { name: string }, { age: number; name: string }
+]> // { value: string, name: number, age: number }
+
