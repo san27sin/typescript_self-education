@@ -97,7 +97,17 @@ type Res22 = Reverse2<[ ...Ten2, ...Ten2, ...Ten2, ...Ten2, ...Ten2, 1]>
 
 // задание 4
 
-type SafeMergeTuple<T extends any[]> = T
+type Merge<A, B> = {
+  [K in keyof A | keyof B]: K extends keyof B ? B[K] : K extends keyof A ? A[K] : never
+};
+
+type SafeMergeTuple<T extends any[]> = T extends [infer First, ...infer Rest]
+  ? First extends object
+    ? Rest extends []
+      ? First
+      : Merge<First, SafeMergeTuple<Rest>>
+    : never
+  : {};
 
 type Res44 = SafeMergeTuple<[
   { value: string }, { name: string }, { age: number; name: string }
