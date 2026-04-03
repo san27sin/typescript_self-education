@@ -48,3 +48,48 @@ type User1 = { name: string; value: string }
 type CreateUser = OptionalKeys<User1, 'value'>
 
 export type Simplify<T> = { [KeyType in keyof T]: T[KeyType] } & {}
+
+// ====
+
+type Fn = (param: number, param2: string) => 'return'
+type ReturnT = ReturnType<Fn>
+type Params = Parameters<Fn>
+
+class User {
+  constructor(public name: string) {}
+}
+
+type R5 = ConstructorParameters<typeof User>
+// ^?type R5 = [name: string]
+type R6 = InstanceType<typeof User>
+// ^?type R6 = User
+
+// ======= NoInfer =========
+
+type NoInfer<T> = [T][T extends any ? 0 : never]; // не встроен, берется из библиотеки или прописать самому
+
+function value<T>(obj: { arr: NoInfer<T[]>; value: T }): T[] {
+  return obj.arr
+}
+// происходит приоритетность вывода дженерика типа
+const r = value({
+  value: 'va',
+  arr: ['1']
+})
+
+// ======= ThisType =========
+
+function fn<D>(
+  obj: { data: D, methods: Record<string, unknown> & ThisType<D> }
+) {
+  return obj
+}
+
+fn({
+  data: { name: 1, str: 'value' },
+  methods: {
+    getname() {
+      return this.name
+    }
+  }
+})
