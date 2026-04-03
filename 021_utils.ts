@@ -1,6 +1,6 @@
 // 21 021 4.1 Встроенные утилиты
 
-export {}
+export { }
 
 class ThenableUser {
   then(cb: (user: { name: string }) => void) {}
@@ -66,7 +66,7 @@ type R6 = InstanceType<typeof User>
 
 // ======= NoInfer =========
 
-type NoInfer<T> = [T][T extends any ? 0 : never]; // не встроен, берется из библиотеки или прописать самому
+export type NoInfer<T> = [T][T extends any ? 0 : never]; // не встроен, берется из библиотеки или прописать самому
 
 function value<T>(obj: { arr: NoInfer<T[]>; value: T }): T[] {
   return obj.arr
