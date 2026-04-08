@@ -47,7 +47,7 @@ type OptionalKeys<T, K extends keyof T> = Simplify<Omit<T, K> & Partial<Pick<T, 
 type User1 = { name: string; value: string }
 type CreateUser = OptionalKeys<User1, 'value'>
 
-export type Simplify<T> = { [KeyType in keyof T]: T[KeyType] } & {}
+type Simplify<T> = { [KeyType in keyof T]: T[KeyType] } & {}
 
 // ====
 
