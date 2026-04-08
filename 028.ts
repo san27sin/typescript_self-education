@@ -12,3 +12,10 @@ type TuplifyUnion<T, L = LastOf<T>> =
 
 type abc = 'a' | 'b' | 'c'
 type t = TuplifyUnion<abc> // ['a', 'b', 'c']
+
+// Домашнее задание
+
+type ObjectToTuple<T> = LastOf<T> extends { } ? [LastOf<T>] : []
+
+type R = ObjectToTuple<{ name: string, value: string }>
+// [['name', string], ['value', string]]
