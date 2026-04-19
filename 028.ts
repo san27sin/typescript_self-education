@@ -15,7 +15,11 @@ type t = TuplifyUnion<abc> // ['a', 'b', 'c']
 
 // Домашнее задание
 
-type ObjectToTuple<T> = LastOf<T> extends { } ? [LastOf<T>] : []
+type ObjectToTuple<T, U = keyof T> =
+  IsNever<U> extends true ? []
+    : LastOf<U> extends infer L
+      ? [...ObjectToTuple<T, Exclude<U, L>>, [L, T[L & keyof T]]]
+      : never
 
-type R = ObjectToTuple<{ name: string, value: string }>
-// [['name', string], ['value', string]]
+type R = ObjectToTuple<{ name: string, value: number }>
+// [['name', string], ['value', number]]
