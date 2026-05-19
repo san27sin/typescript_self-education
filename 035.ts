@@ -34,5 +34,63 @@ type SplitByDot<T> =
 
 // тут хвостовая не обязательна, так как переполнение стека маловероятно
 type R84 = SplitByDot<'user.create.many'>
+// ^? type R84 = ['user', 'create', 'many']
 
-// написать как делать динамически
+type SplitBy<T, Pattern extends string = ''> =
+    T extends `${infer FirstPart}${Pattern}${infer Rest}`
+        ? [FirstPart, ...SplitBy<Rest, Pattern>]
+        : [T]
+
+type R85 = SplitBy<'user.create.many', '.'>
+// ^?type R85 = ['user', 'create', 'many']
+
+// === String modification ===
+
+// Сначала парсим потом склеиваем через операции со строкой
+type StringReverse<T> = T extends `${infer FirstLetter}${infer Rest}`
+    ? `${StringReverse<Rest>}${FirstLetter}`
+    : T
+
+type R101 = StringReverse<'Value'>
+// ^?type R101 = 'eulaV
+
+// Пример snake-case
+
+type SnakeCase<S extends string> = S extends `${infer FirstLetter}${infer Rest}` ?
+    Rest extends Uncapitalize<Rest>
+        ? `${Lowercase<FirstLetter>}${SnakeCase<Rest>}`
+        : `${Lowercase<FirstLetter>}_${SnakeCase<Rest>}`
+    : S
+
+type R9 = SnakeCase<`helloWorld`>
+// ^?type R9 = 'hello_world'
+
+// задание 1
+type Trim<T> = T
+
+type TrimR = Trim<'   Hello world!   '> // "Hello world!"
+
+// задание 2
+
+type ReplaceAll<
+    S extends string,
+    From extends string,
+    To extends string,
+> = T
+
+type R = ReplaceAll<'hello world my hello freand', 'hello', 'dear'>
+// "dear world my dear freand"
+
+// задание 4 посимвольный обход
+
+type KebabCase<T> = T
+
+type FooBarBaz = KebabCase<"FooBarBaz"> // foo-bar-baz
+type DoNothing = KebabCase<"do-nothing"> // do-nothing
+
+// задание 5 обход паттерна
+
+type CamelCase<T> = T
+
+type camelCase1 = CamelCase<'hello_world_with_types'> // helloWorldWithTypes
+type camelCase2 = CamelCase<'HELLO_WORLD_WITH_TYPES'> // helloWorldWithTypes
