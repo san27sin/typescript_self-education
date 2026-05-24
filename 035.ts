@@ -66,9 +66,21 @@ type R9 = SnakeCase<`helloWorld`>
 // ^?type R9 = 'hello_world'
 
 // задание 1
-type Trim<T> = T
+type Trim<T> = T extends `${infer FirstLetter}${infer Rest}`
+    ? FirstLetter extends ' ' ? Trim<Rest> : `${FirstLetter}${Trim<Rest>}`
+    : T
 
 type TrimR = Trim<'   Hello world!   '> // "Hello world!"
+
+// решение было по бокам реукрсивно откусывать
+
+type Trim2<T extends string> = T extends ` ${infer Rest}`
+    ? Trim2<Rest>
+    : T extends `${infer Rest} `
+        ? Trim2<Rest>
+        : T
+
+type TrimR2 = Trim2<'   Hello world!   '> // "Hello world!"
 
 // задание 2
 
