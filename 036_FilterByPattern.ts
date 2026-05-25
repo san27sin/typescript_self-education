@@ -6,7 +6,11 @@ type MatchSegment<PathSegment, PatternSegment> =
         ? NotEmptyString<PathSegment>
         : PathSegment extends PatternSegment ? true : false
 
-type And<A, B> = A extends true ? B extends true ? true : false : false
+type And<A, B> = A extends true
+    ? B extends true
+        ? true
+        : false
+    : false
 
 type MatchPattern<Path, Pattern> =
     Pattern extends `${infer PatternHead}.${infer PatternRest}`
@@ -27,7 +31,7 @@ type R4 = MatchSegment<'user.deleted' | 'book.deleted' | 'user.created' | 'user'
 
 // задание 7
 
-type FilterMatch<T, U> = T | U
+type FilterMatch<Path, Pattern> = Path | Pattern
 
 type F1 = FilterMatch<'/hello', '/:id'> // hello
 type F2 = FilterMatch<'/posts/1' | '/posts/2' | '/posts/3/create', '/posts/:id'> // '/posts/1' | '/posts/2'
