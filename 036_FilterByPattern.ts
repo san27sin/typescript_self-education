@@ -31,9 +31,30 @@ type R4 = MatchSegment<'user.deleted' | 'book.deleted' | 'user.created' | 'user'
 
 // задание 7
 
-type FilterMatch<Path, Pattern> = Path | Pattern
+type HasSlash<S extends string> = S extends `${string}/${string}` ? true : false
 
-type F1 = FilterMatch<'/hello', '/:id'> // hello
+type MatchUrlSegment<Segment extends string, PatternSegment extends string> =
+    PatternSegment extends `:${string}`
+        ? HasSlash<Segment> extends true ? false : true
+        : Segment extends PatternSegment ? true : false
+
+type MatchPath<Path extends string, Pattern extends string> =
+    Pattern extends `${infer PHead}/${infer PRest}`
+        ? Path extends `${infer SHead}/${infer SRest}`
+            ? MatchUrlSegment<SHead, PHead> extends true
+                ? MatchPath<SRest, PRest>
+                : false
+            : false
+        : HasSlash<Path> extends true
+            ? false
+            : MatchUrlSegment<Path, Pattern>
+
+type FilterMatch<Path, Pattern extends string> =
+    Path extends string
+        ? MatchPath<Path, Pattern> extends true ? Path : never
+        : never
+
+type F1 = FilterMatch<'/hello', '/:id'> // /hello
 type F2 = FilterMatch<'/posts/1' | '/posts/2' | '/posts/3/create', '/posts/:id'> // '/posts/1' | '/posts/2'
 type F3 = FilterMatch<'/user/1', '/posts/:id'> // never
 
